@@ -1,0 +1,67 @@
+<button type="button" class="btn btn-outline-primary float-end student-button-new" data-bs-toggle="modal" data-bs-target="#new-student">New</button>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef> Weight </th>
+      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell *matHeaderCellDef> Symbol </th>
+      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+
+
+
+
+  <!-- New Student Modal  -->
+  <div class="modal fade" tabindex="-1" id="new-student">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">New Student</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form [formGroup]="newStudentForm" class="row g-3 needs-validation" novalidate>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <label for="input-name" class="form-label">Name</label>
+                    <input id="input-name" type="text" class="form-control" formControlName="name" >
+                    *{{ newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched }}*
+                    <div class="invalid-feedback">
+                        Please choose a username.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (submit)="saveStudent()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
