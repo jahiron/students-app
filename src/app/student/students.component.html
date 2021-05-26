@@ -1,45 +1,120 @@
-<button type="button" class="btn btn-outline-primary float-end student-button-new" data-bs-toggle="modal" data-bs-target="#new-student">New</button>
+<button type="button" class="button is-outlined student-button-new modal-button is-loading" data-target="#new-student">New</button>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-  
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
-  
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-  
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-  
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-
-
+<div class="table-container">
+  <table class="table is-hoverable">
+    <thead>
+      <tr><th>Name</th></tr>
+      <tr><th>Last Name</th></tr>
+      <tr><th>Birthdate</th></tr>
+      <tr></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{ student.name }}</td>
+        <td> {{ student.lastName }}</td>
+        <td> {{student.birthdate }} </td>
+      </tr>      
+    </tbody>
+  </table>  
+</div>
+<nav class="pagination is-small" role="navigation" aria-label="pagination">
+  <a class="pagination-previous">Previous</a>
+  <a class="pagination-next">Next page</a>
+  <ul class="pagination-list">
+    <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+    <li><span class="pagination-ellipsis">&hellip;</span></li>
+    <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+    <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+    <li><span class="pagination-ellipsis">&hellip;</span></li>
+    <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+  </ul>
+</nav>
 
 
 
   <!-- New Student Modal  -->
-  <div class="modal fade" tabindex="-1" id="new-student">
+
+  <div class="modal" id="new-student">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+    <form [formGroup]="newStudentForm" (submit)="saveStudent()" >
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modal title</p>
+        <button class="delete dismiss" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input [ngClass]="{'is-danger':newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched}" formControlName="name" class="input" type="text" placeholder="Text input">
+          </div>
+          <p *ngIf="newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('name')?.errors && newStudentForm.get('name')?.errors?.required">The name is required</span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label">Last Name</label>
+          <div class="control">
+            <input [ngClass]="{'is-danger':newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.touched}" formControlName="lastName" class="input" type="text" placeholder="Text input">
+          </div>
+          <p *ngIf="newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.errors?.required">The last name is required</span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label">Birthdate</label>
+          <div class="control has-icons-left has-icons-right">
+            <input [ngClass]="{'is-danger':newStudentForm.get('birthdate')?.errors && newStudentForm.get('birthdate')?.touched}" formControlName="birthdate" class="input" type="text" placeholder="Text input" type="date">
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-check"></i>
+            </span>
+          </div>
+          <p *ngIf="newStudentForm.get('birthdate')?.errors && newStudentForm.get('birthdate')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('birthdate')?.errors && newStudentForm.get('birthdate')?.errors?.required">The last name is required</span>
+          </p>
+        </div>
+
+        <div  class="field">
+          <label class="label">Biography</label>
+          <div [ngClass]="{'is-danger':newStudentForm.get('bigraphyFile')?.errors && newStudentForm.get('bigraphyFile')?.touched}" id="bio-file" class="file has-name is-left">
+            <label class="file-label">
+              <input  formControlName="bigraphyFile" class="file-input" type="file" name="resume">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a file…
+                </span>
+              </span>
+              <span class="file-name">
+                No file uploaded
+              </span>
+            </label>
+          </div>
+          <p *ngIf="newStudentForm.get('bigraphyFile')?.errors && newStudentForm.get('bigraphyFile')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('bigraphyFile')?.errors && newStudentForm.get('bigraphyFile')?.errors?.required">The last name is required</span>
+          </p>
+        </div>
+  
+      </section>
+      <footer class="modal-card-foot">
+        <button [ngClass]="{'dismiss': newStudentForm.valid}" type="submit" class="button is-success">Save changes</button>
+        <button class="button dismiss" type="button">Cancel</button>
+      </footer>
+    </form>
+    </div>
+  </div>
+
+
+  <!-- <div class="modal fade" tabindex="-1" id="new-student">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -64,4 +139,4 @@
         </form>
       </div>
     </div>
-  </div>
+  </div> -->

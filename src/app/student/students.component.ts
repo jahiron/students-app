@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PeriodicElement } from '../model/student';
+import { Student } from '../model/student';
 
 @Component({
   selector: 'app-students',
@@ -8,33 +8,22 @@ import { PeriodicElement } from '../model/student';
 })
 export class StudentsComponent implements OnInit {
   newStudentForm!: FormGroup;
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource?: PeriodicElement[] = [
-    {
-      position: 1,
-      name: 'name',
-      weight: 10,
-      symbol: 'as',
-    },
-    {
-      position: 1,
-      name: 'name',
-      weight: 15,
-      symbol: 'as',
-    },
-  ];
+  students: Student[] = [];
+
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.newStudentForm = this.formBuilder.group({
       name: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      birthDate: [null, [Validators.required]],
+      birthdate: [null, [Validators.required]],
       bigraphyFile: [null, [Validators.required]],
     });
   }
 
   saveStudent() {
     this.newStudentForm.markAllAsTouched();
+    var student = this.newStudentForm.value as Student;
+    this.students.push(student);
   }
 }
