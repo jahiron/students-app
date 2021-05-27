@@ -1,18 +1,19 @@
-<button type="button" class="button is-outlined student-button-new modal-button is-loading" data-target="#new-student">New</button>
+<button type="button" class="button is-outlined student-button-new modal-button" data-target="#new-student">New</button>
 
 <div class="table-container">
   <table class="table is-hoverable">
     <thead>
-      <tr><th>Name</th></tr>
-      <tr><th>Last Name</th></tr>
-      <tr><th>Birthdate</th></tr>
-      <tr></tr>
+      <tr>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+      </tr>
     </thead>
     <tbody>
       <tr *ngFor="let student of students">
         <td>{{ student.name }}</td>
         <td> {{ student.lastName }}</td>
-        <td> {{student.birthdate }} </td>
+        <td> {{student.age }} </td>
       </tr>      
     </tbody>
   </table>  
@@ -66,9 +67,9 @@
         </div>
 
         <div class="field">
-          <label class="label">Birthdate</label>
+          <label class="label">Age</label>
           <div class="control has-icons-left has-icons-right">
-            <input [ngClass]="{'is-danger':newStudentForm.get('birthdate')?.errors && newStudentForm.get('birthdate')?.touched}" formControlName="birthdate" class="input" type="text" placeholder="Text input" type="date">
+            <input [ngClass]="{'is-danger':newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched}" formControlName="age" class="input" type="text" placeholder="Text input" type="date">
             <span class="icon is-small is-left">
               <i class="fas fa-user"></i>
             </span>
@@ -76,8 +77,8 @@
               <i class="fas fa-check"></i>
             </span>
           </div>
-          <p *ngIf="newStudentForm.get('birthdate')?.errors && newStudentForm.get('birthdate')?.touched" class="help is-danger">
-            <span *ngIf="newStudentForm.get('birthdate')?.errors && newStudentForm.get('birthdate')?.errors?.required">The last name is required</span>
+          <p *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.errors?.required">The last name is required</span>
           </p>
         </div>
 
