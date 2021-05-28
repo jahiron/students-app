@@ -1,4 +1,5 @@
 <button type="button" class="button is-outlined student-button-new modal-button" data-target="#new-student">New</button>
+<button type="button" class="button is-outlined student-button-new modal-button" data-target="#import-student">Import</button>
 
 <div class="table-container">
   <table class="table is-hoverable">
@@ -41,7 +42,7 @@
     <div class="modal-card">
     <form [formGroup]="newStudentForm" (submit)="saveStudent()" >
       <header class="modal-card-head">
-        <p class="modal-card-title">Modal title</p>
+        <p class="modal-card-title">New Student</p>
         <button class="delete dismiss" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
@@ -108,6 +109,49 @@
       </section>
       <footer class="modal-card-foot">
         <button [ngClass]="{'dismiss': newStudentForm.valid}" type="submit" class="button is-success">Save changes</button>
+        <button class="button dismiss" type="button">Cancel</button>
+      </footer>
+    </form>
+    </div>
+  </div>
+
+
+  <div class="modal" id="import-student">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+    <form [formGroup]="importStudentsForm" (submit)="importStudents()" >
+      <header class="modal-card-head">
+        <p class="modal-card-title">Import Students</p>
+        <button class="delete dismiss" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">      
+
+        <div  class="field">
+          <label class="label">Import students</label>
+          <div [ngClass]="{'is-danger':importStudentsForm.get('bigraphyFile')?.errors && importStudentsForm.get('bigraphyFile')?.touched}" id="bio-file" class="file has-name is-left">
+            <label class="file-label">
+              <input (change)="filePickedEvent($event)" accept=".xml" formControlName="bigraphyFile" class="file-input" type="file" name="resume">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a file…
+                </span>
+              </span>
+              <span class="file-name">
+                No file uploaded
+              </span>
+            </label>
+          </div>
+          <p *ngIf="newStudentForm.get('importStudentsForm')?.errors && newStudentForm.get('importStudentsForm')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('importStudentsForm')?.errors && newStudentForm.get('importStudentsForm')?.errors?.required">The xml file is required</span>
+          </p>
+        </div>
+  
+      </section>
+      <footer class="modal-card-foot">
+        <button [ngClass]="{'dismiss': importStudentsForm.valid}" type="submit" class="button is-success">Save changes</button>
         <button class="button dismiss" type="button">Cancel</button>
       </footer>
     </form>

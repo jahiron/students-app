@@ -9,6 +9,8 @@ import { StudentService } from './student.service';
 })
 export class StudentsComponent implements OnInit {
   newStudentForm!: FormGroup;
+  importStudentsForm!: FormGroup;
+  xmlStudentsFile!: File;
   students: Student[] = [];
   _loading = false;
 
@@ -24,6 +26,10 @@ export class StudentsComponent implements OnInit {
       name: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
       age: [null, [Validators.required]],
+      bigraphyFile: [null, [Validators.required]],
+    });
+
+    this.importStudentsForm = this.formBuilder.group({
       bigraphyFile: [null, [Validators.required]],
     });
   }
@@ -44,5 +50,18 @@ export class StudentsComponent implements OnInit {
     this.newStudentForm.markAllAsTouched();
     var student = this.newStudentForm.value as Student;
     this.students.push(student);
+  }
+
+  importStudents() {
+    this.importStudentsForm.markAllAsTouched();
+    this.studentService
+      .postMultipleStudents(this.xmlStudentsFile)
+      .subscribe((students: Student[]) => {
+        this.students.push(...students);
+      });
+  }
+
+  filePickedEvent(event: any) {
+    this.xmlStudentsFile = event.target.files[0];
   }
 }

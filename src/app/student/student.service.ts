@@ -15,4 +15,13 @@ export class StudentService {
       `${this.studentsApi}?PageIndex=${pageIndex}&PageSize=${pageSize}`
     );
   }
+  //{ headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+  postMultipleStudents(file: File) {
+    var formData = new FormData();
+    formData.append('StudentXmlFile', file);
+    return this.http.post<Student[]>(
+      `${this.studentsApi}/PostMultipleStudents`,
+      formData
+    );
+  }
 }
