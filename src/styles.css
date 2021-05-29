@@ -25,8 +25,13 @@ body {
 }
 
 /* Student Styles */
+.student-list{
+  margin: auto;
+  width: 80%;
+}
+
 .student-button-new{
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 10px; 
 }
 

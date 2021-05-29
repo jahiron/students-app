@@ -27,7 +27,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [             
+            "styles": [
               "src/styles.css"
             ],
             "scripts": []
@@ -90,7 +90,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [              
+            "styles": [
               "src/styles.css"
             ],
             "scripts": []
@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "student-app"
+  "defaultProject": "student-app",
+  "cli": {
+    "analytics": false
+  }
 }

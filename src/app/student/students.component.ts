@@ -9,7 +9,9 @@ import { StudentService } from './student.service';
 })
 export class StudentsComponent implements OnInit {
   newStudentForm!: FormGroup;
-  students: Student[] = [];
+  students: Student[] = [
+    { id: 1, name: 'Jahiron', lastName:'Rodriguez', age: 45}
+  ];
   _loading = false;
 
   constructor(
@@ -18,7 +20,7 @@ export class StudentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getStudents();
+    //this.getStudents();
 
     this.newStudentForm = this.formBuilder.group({
       name: [null, [Validators.required]],
