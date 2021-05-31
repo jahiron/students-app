@@ -1,0 +1,75 @@
+<div *ngIf="loading" class="full-loading">
+  <div class="lds-dual-ring"></div>
+</div>
+
+<div class="modal" id="new-student">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+    <form [formGroup]="newStudentForm" (submit)="saveStudent()" >
+      <header class="modal-card-head">
+        <p class="modal-card-title">New Student</p>
+        <button class="delete dismiss" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input [ngClass]="{'is-danger':newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched}" formControlName="name" class="input" type="text">
+          </div>
+          <p *ngIf="newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('name')?.errors && newStudentForm.get('name')?.errors?.required">The name is required</span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label">Last Name</label>
+          <div class="control">
+            <input [ngClass]="{'is-danger':newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.touched}" formControlName="lastName" class="input" type="text">
+          </div>
+          <p *ngIf="newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.errors?.required">The last name is required</span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label">Age</label>
+          <div class="control has-icons-left has-icons-right">
+            <input [ngClass]="{'is-danger':newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched}" formControlName="age" class="input" type="number">
+          </div>
+          <p *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched" class="help is-danger">
+            <span *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.errors?.required">The age is required</span>
+          </p>
+        </div>
+
+        <div  class="field">
+          <label class="label">Biography</label>
+          <div [ngClass]="{'is-danger':newStudentForm.get('bioFile')?.errors && newStudentForm.get('bioFile')?.dirty}" class="my-input-file" class="file has-name is-left">
+            <label class="file-label">
+              <input (change)="filePickedEvent($event)" accept="application/msword, text/plain, application/pdf" formControlName="bioFile" class="file-input" type="file" name="resume">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a file…
+                </span>
+              </span>
+              <span class="file-name">
+                No file uploaded
+              </span>
+            </label>
+          </div>
+          <p *ngIf="newStudentForm.get('bioFile')?.errors && newStudentForm.get('bioFile')?.dirty" class="help is-danger">
+            <span *ngIf="newStudentForm.get('bioFile')?.errors?.required">The biography file is required</span>
+          </p>
+        </div>
+  
+      </section>
+      <footer class="modal-card-foot">
+        <button [ngClass]="{'dismiss': newStudentForm.valid}" type="submit" class="button is-info" [ngClass]="{'is-loading':loading}">Save</button>
+        <button class="button dismiss" type="button">Cancel</button>
+      </footer>
+    </form>
+    </div>
+  </div>

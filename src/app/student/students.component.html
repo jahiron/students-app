@@ -1,168 +1,52 @@
+
 <div class="student-list">
-  <div class="row buttons">
-    <button type="button" class="button is-outlined student-button-new modal-button" data-target="#new-student">New</button>  
-    <button type="button" class="button is-outlined student-button-new modal-button" data-target="#import-student">Import</button>
+  <div *ngIf="loading" class="full-loading">
+    <div class="lds-dual-ring"></div>
   </div>
 
+  <h2 class="main-title">Students List</h2>
 
-  <div class="table-container">
+  <div class="buttons">
+    <button type="button" class="button is-light student-button-new modal-button" data-target="#new-student">New</button>  
+    <button type="button" class="button is-light student-button-new modal-button" data-target="#import-student">Import</button>
+  </div>
+
+  <div *ngIf="students.length === 0">
+    <article class="message is-dark">
+      <div class="message-body">
+        There are no students, add one by clicking the New button
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="students.length > 0" class="table-container">
     <table class="table is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
         <tr>
           <th>Name</th>
           <th>Last Name</th>
           <th>Age</th>
-          <th></th>
+          <th style="width: 5%"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let student of students">
+        <tr *ngFor="let student of students | paginate: { itemsPerPage: 10, currentPage: pageIndex }">
           <td>{{ student.name }}</td>
           <td> {{ student.lastName }}</td>
           <td> {{student.age }} </td>
-          <td>  <a *ngIf="student.bioFileUrl" (click)="downloadBio(student)" class="button"><i class="fas fa-file-download"></i> </a> </td>
+          <td>  <a *ngIf="student.bioFileUrl" (click)="downloadBio(student)" class="button"><i class="far fa-eye"></i> </a> </td>
         </tr>      
       </tbody>
     </table>  
-  </div>
-
-<!-- <nav class="pagination is-small is-rounded" role="navigation" aria-label="pagination">
-  <a class="pagination-previous">Previous</a>
-  <ul class="pagination-list">
-    <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-    <li><span class="pagination-ellipsis">&hellip;</span></li>
-    <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-    <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-    <li><span class="pagination-ellipsis">&hellip;</span></li>
-    <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-  </ul>
-  <a class="pagination-next">Next page</a>
-
-</nav> -->
-
+  </div>  
+    <pagination-controls *ngIf="students.length > 9" class="pagination-style" (pageChange)="changePagination($event)"></pagination-controls>
 </div>
 
 
   <!-- New Student Modal  -->
+<app-new-student-modal (studentSavedEvent)="studentSaved($event)"></app-new-student-modal>
 
-  <div class="modal" id="new-student">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-    <form [formGroup]="newStudentForm" (submit)="saveStudent()" >
-      <header class="modal-card-head">
-        <p class="modal-card-title">New Student</p>
-        <button class="delete dismiss" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body">
-        
-        <div class="field">
-          <label class="label">Name</label>
-          <div class="control">
-            <input [ngClass]="{'is-danger':newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched}" formControlName="name" class="input" type="text" placeholder="Text input">
-          </div>
-          <p *ngIf="newStudentForm.get('name')?.errors && newStudentForm.get('name')?.touched" class="help is-danger">
-            <span *ngIf="newStudentForm.get('name')?.errors && newStudentForm.get('name')?.errors?.required">The name is required</span>
-          </p>
-        </div>
+  <!-- Import Student Modal  -->
+<app-import-student-modal (importStudentsSavedEvent)="importStudentsSaved($event)"></app-import-student-modal>
 
-        <div class="field">
-          <label class="label">Last Name</label>
-          <div class="control">
-            <input [ngClass]="{'is-danger':newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.touched}" formControlName="lastName" class="input" type="text" placeholder="Text input">
-          </div>
-          <p *ngIf="newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.touched" class="help is-danger">
-            <span *ngIf="newStudentForm.get('lastName')?.errors && newStudentForm.get('lastName')?.errors?.required">The last name is required</span>
-          </p>
-        </div>
-
-        <div class="field">
-          <label class="label">Age</label>
-          <div class="control has-icons-left has-icons-right">
-            <input [ngClass]="{'is-danger':newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched}" formControlName="age" class="input" type="number" placeholder="Text input">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-            </span>
-            <span class="icon is-small is-right">
-              <i class="fas fa-check"></i>
-            </span>
-          </div>
-          <p *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched" class="help is-danger">
-            <span *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.errors?.required">The age is required</span>
-          </p>
-        </div>
-
-        <div  class="field">
-          <label class="label">Biography</label>
-          <div [ngClass]="{'is-danger':newStudentForm.get('bioFile')?.errors && newStudentForm.get('bioFile')?.touched}" class="my-input-file" class="file has-name is-left">
-            <label class="file-label">
-              <input (change)="filePickedEvent($event)" accept="application/msword, text/plain, application/pdf" formControlName="bioFile" class="file-input" type="file" name="resume">
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label">
-                  Choose a file…
-                </span>
-              </span>
-              <span class="file-name">
-                No file uploaded
-              </span>
-            </label>
-          </div>
-          <p *ngIf="newStudentForm.get('bioFile')?.errors && newStudentForm.get('bioFile')?.touched" class="help is-danger">
-            <span *ngIf="newStudentForm.get('bioFile')?.errors && newStudentForm.get('bioFile')?.errors?.required">The biography is required</span>
-          </p>
-        </div>
-  
-      </section>
-      <footer class="modal-card-foot">
-        <button [ngClass]="{'dismiss': newStudentForm.valid}" type="submit" class="button is-success" [ngClass]="{'is-loading':loading}">Save changes</button>
-        <button class="button dismiss" type="button">Cancel</button>
-      </footer>
-    </form>
-    </div>
-  </div>
-
-
-  <div class="modal" id="import-student">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-    <form [formGroup]="importStudentsForm" (submit)="importStudents()" >
-      <header class="modal-card-head">
-        <p class="modal-card-title">Import Students</p>
-        <button class="delete dismiss" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body">      
-
-        <div  class="field">
-          <label class="label">Import students</label>
-          <div [ngClass]="{'is-danger':importStudentsForm.get('bioFile')?.errors && importStudentsForm.get('bioFile')?.touched}" class="my-input-file" class="file has-name is-left">
-            <label class="file-label">
-              <input (change)="filePickedEvent($event)" accept=".xml" formControlName="bioFile" class="file-input" type="file" name="resume">
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label">
-                  Choose a file…
-                </span>
-              </span>
-              <span class="file-name">
-                No file uploaded
-              </span>
-            </label>
-          </div>
-          <p *ngIf="newStudentForm.get('importStudentsForm')?.errors && newStudentForm.get('importStudentsForm')?.touched" class="help is-danger">
-            <span *ngIf="newStudentForm.get('importStudentsForm')?.errors && newStudentForm.get('importStudentsForm')?.errors?.required">The xml file is required</span>
-          </p>
-        </div>
-  
-      </section>
-      <footer class="modal-card-foot">
-        <button [ngClass]="{'dismiss': importStudentsForm.valid}" type="submit" class="button is-success">Save changes</button>
-        <button class="button dismiss" type="button">Cancel</button>
-      </footer>
-    </form>
-    </div>
-  </div>
+ 
