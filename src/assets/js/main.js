@@ -1,3 +1,5 @@
+
+
 $(document).ready(function () {
   $("body").on("click", ".modal-button", function () {
     var modalBtn = $(this).data("target");
@@ -10,11 +12,14 @@ $(document).ready(function () {
     $(".modal").removeClass("is-active");
   });
 
-  const fileInput = document.querySelector("#bio-file input[type=file]");
+  const fileInput = document.querySelector("input[type=file]");
   fileInput.onchange = () => {
     if (fileInput.files.length > 0) {
-      const fileName = document.querySelector("#bio-file .file-name");
+      const fileName = document.querySelector(".file-name");
       fileName.textContent = fileInput.files[0].name;
     }
   };
+
+
+
 });

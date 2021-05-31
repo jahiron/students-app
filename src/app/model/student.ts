@@ -3,6 +3,6 @@ export interface Student {
   name: string;
   lastName: string;
   age: number;
-  biographyFile?: File;
-  registerUser?: string;
+  bioFileUrl: string;
+  registerUser: string;
 }

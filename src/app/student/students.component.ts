@@ -9,10 +9,10 @@ import { StudentService } from './student.service';
 })
 export class StudentsComponent implements OnInit {
   newStudentForm!: FormGroup;
-  students: Student[] = [
-    { id: 1, name: 'Jahiron', lastName:'Rodriguez', age: 45}
-  ];
-  _loading = false;
+  importStudentsForm!: FormGroup;
+  pickedFile!: File;
+  students: Student[] = [];
+  loading = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -20,31 +20,78 @@ export class StudentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.getStudents();
+    this.getStudents();
 
     this.newStudentForm = this.formBuilder.group({
       name: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
       age: [null, [Validators.required]],
-      bigraphyFile: [null, [Validators.required]],
+      bioFile: [null, [Validators.required]],
+    });
+
+    this.importStudentsForm = this.formBuilder.group({
+      bioFile: [null, [Validators.required]],
     });
   }
 
   getStudents() {
-    this._loading = true;
+    this.loading = true;
 
     this.studentService.getStudents(1, 10).subscribe(
       (students) => {
         this.students = students;
-        this._loading = false;
+        this.loading = false;
       },
-      (err) => (this._loading = false)
+      (err) => (this.loading = false)
     );
   }
 
   saveStudent() {
+    debugger
     this.newStudentForm.markAllAsTouched();
-    var student = this.newStudentForm.value as Student;
-    this.students.push(student);
+    
+    if(this.newStudentForm.invalid){
+      return;
+    }
+
+    var student = this.newStudentForm.value;
+
+    var formData = new FormData();
+
+    formData.append(this.pickedFile.name, this.pickedFile);
+    formData.append("File", this.pickedFile);
+    
+    for(var item in student){
+      formData.append(item, student[item])
+    }
+    debugger
+
+    this.studentService.postStudent(formData).subscribe(student => {
+      if(student){
+    debugger
+
+        this.students.push(student);
+      }
+    });
+  }
+
+  importStudents() {
+    this.importStudentsForm.markAllAsTouched();
+    this.studentService
+      .postMultipleStudents(this.pickedFile)
+      .subscribe((students: Student[]) => {
+        this.students.push(...students);
+      });
+  }
+
+  filePickedEvent(event: any) {
+    this.pickedFile = event.target.files[0];
+  }
+
+  downloadBio(student: Student){
+    this.studentService.downloadBio(student.bioFileUrl).subscribe(file => {
+     var obj = window.URL.createObjectURL(file);
+      window.open(obj);
+    });
   }
 }
