@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Student } from '../model/student';
 import { StudentService } from './student.service';
 
@@ -16,7 +17,8 @@ export class NewStudentModalComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -29,6 +31,7 @@ export class NewStudentModalComponent implements OnInit {
   }
 
   saveStudent() {
+
     this.newStudentForm.markAllAsTouched();
     this.newStudentForm.get('bioFile')?.markAsDirty();
 
@@ -49,6 +52,7 @@ export class NewStudentModalComponent implements OnInit {
 
     this.studentService.postStudent(formData).subscribe(
       (student) => {
+        this.toastr.success("Saved student successfully", "Success");
         this.loading = false;
         if (student) {
           this.studentSavedEvent.emit(student);

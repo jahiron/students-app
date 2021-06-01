@@ -5,4 +5,5 @@ export interface Student {
   age: number;
   bioFileUrl: string;
   registerUser: string;
+  registerCount:number;
 }

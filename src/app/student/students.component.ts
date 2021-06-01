@@ -10,6 +10,7 @@ export class StudentsComponent implements OnInit {
   students: Student[] = [];
   loading = false;
   pageIndex = 1;
+  registerCount = 0;
 
   constructor(private studentService: StudentService) {}
 
@@ -21,9 +22,9 @@ export class StudentsComponent implements OnInit {
     this.loading = true;
     this.studentService.getStudents(this.pageIndex, 10).subscribe(
       (students) => {
-        console.log({ students });
         this.students = students;
         this.loading = false;
+        this.updateRegisterCount();
       },
       (err) => (this.loading = false)
     );
@@ -49,9 +50,15 @@ export class StudentsComponent implements OnInit {
 
   studentSaved(student: Student) {
     this.students = [...this.students, student];
+    this.updateRegisterCount();
   }
 
   importStudentsSaved(students: Student[]) {
     this.students = [...this.students, ...students];
+    this.updateRegisterCount();
+  }
+
+  updateRegisterCount(){
+    this.registerCount = this.students.length > 0 ? this.students[0].registerCount : 0;
   }
 }

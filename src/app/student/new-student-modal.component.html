@@ -34,7 +34,7 @@
 
         <div class="field">
           <label class="label">Age</label>
-          <div class="control has-icons-left has-icons-right">
+          <div class="control">
             <input [ngClass]="{'is-danger':newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched}" formControlName="age" class="input" type="number">
           </div>
           <p *ngIf="newStudentForm.get('age')?.errors && newStudentForm.get('age')?.touched" class="help is-danger">

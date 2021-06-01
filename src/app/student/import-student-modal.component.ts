@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Student } from '../model/student';
 import { StudentService } from './student.service';
 
@@ -17,7 +18,8 @@ export class ImportStudentModalComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +36,7 @@ export class ImportStudentModalComponent implements OnInit {
     this.loading = true;
     this.studentService.postMultipleStudents(this.pickedFile).subscribe(
       (students: Student[]) => {
+        this.toastr.success("Imported students successfully", "Success");
         this.loading = false;
         this.importStudentsSavedEvent.emit(students);
       },

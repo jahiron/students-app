@@ -11,7 +11,7 @@
     <button type="button" class="button is-light student-button-new modal-button" data-target="#import-student">Import</button>
   </div>
 
-  <div *ngIf="students.length === 0">
+  <div *ngIf="students.length === 0 && !loading">
     <article class="message is-dark">
       <div class="message-body">
         There are no students, add one by clicking the New button
@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let student of students | paginate: { itemsPerPage: 10, currentPage: pageIndex }">
+        <tr *ngFor="let student of students | paginate: { itemsPerPage: 10, currentPage: pageIndex, totalItems: registerCount}">
           <td>{{ student.name }}</td>
           <td> {{ student.lastName }}</td>
           <td> {{student.age }} </td>
@@ -39,7 +39,7 @@
       </tbody>
     </table>  
   </div>  
-    <pagination-controls *ngIf="students.length > 9" class="pagination-style" (pageChange)="changePagination($event)"></pagination-controls>
+    <pagination-controls *ngIf="students.length > 0" class="pagination-style" (pageChange)="changePagination($event)"></pagination-controls>
 </div>
 
 
